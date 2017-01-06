@@ -41,7 +41,7 @@ If you aren't interested in the output logs then run it with the `--showlogs=fal
 
 * Running jaas in a container
 
-You can also run alexellis2/jaas in a container, but the syntax becomes slightly more verbose:
+You can also run `jaas` in a container, but the syntax becomes slightly more verbose:
 
 ```
 # docker build -t jaas .
