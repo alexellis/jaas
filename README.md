@@ -5,9 +5,9 @@ Jobs as a Service (JaaS) for Docker Swarm
 
 * Pre-requisites:
 * Docker 1.13-RC
-* Go 1.7.3
+* Go 1.7.3 (or Golang container)
 
-Then:
+* Build the code:
 
 ```
 # go build
@@ -38,3 +38,11 @@ If you aren't interested in the output logs then run it with the `--showlogs=fal
 # ./jaas -image alexellis2/cows:latest --showlogs=false
 ```
 
+* Running jaas in a container
+
+You can also run alexellis2/jaas in a container, but the syntax becomes slightly more verbose:
+
+```
+# docker build -t jaas .
+# docker run -ti -v /var/run/docker.sock:/var/run/docker.sock jaas -image alexellis2/cows:latest
+```
