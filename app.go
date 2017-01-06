@@ -90,7 +90,7 @@ func pollTask(c *client.Client, id string, timeout int, showlogs bool) {
 	}
 }
 
-func showTasks(c *client.Client, id string, showlogs bool) bool {
+func showTasks(c *client.Client, id string, showLogs bool) bool {
 	filters1 := filters.NewArgs()
 	filters1.Add("service", id)
 	// fmt.Println("Task filter: ", id)
@@ -106,7 +106,7 @@ func showTasks(c *client.Client, id string, showlogs bool) bool {
 			fmt.Printf("Exit code: %d\n", v.Status.ContainerStatus.ExitCode)
 			fmt.Printf("State: %d", v.Status.State)
 
-			if showlogs == true {
+			if showLogs == true {
 				logRequest, _ := c.ServiceLogs(context.Background(), id, types.ContainerLogsOptions{
 					Follow:     false,
 					ShowStdout: true,
