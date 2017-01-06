@@ -1,5 +1,6 @@
-# jaas
-Jobs as a Service (JaaS) for Docker Swarm
+# jaas - Jobs as a Service (JaaS)
+
+This repository is a prototype CLI for one-time containers/jobs on Docker Swarm using the Docker API.
 
 ## Get started
 
