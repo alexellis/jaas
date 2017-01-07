@@ -1,4 +1,4 @@
-# jaas - Jobs as a Service (JaaS)
+# Ad-hoc Jobs as a Service (JaaS)
 
 This project provides a simple CLI that binds to the Docker Swarm API to create an ad-hoc/one-shot Service and then poll until it exits. Service logs can also be retrieved if the experimental feature is enabled on your Docker Engine.
 
