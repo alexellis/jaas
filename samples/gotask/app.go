@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+        "os"
 )
 
 func main() {
-	fmt.Println("all done.")
+        hostname, _ := os.Hostname()
+        fmt.Println("Hostname: " + hostname)
 }
