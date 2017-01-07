@@ -74,7 +74,7 @@ func pollTask(c *client.Client, id string, timeout int, showlogs bool) {
 	list, _ := c.ServiceList(context.Background(), opts)
 	for _, item := range list {
 		ticks := 0
-		fmt.Println("ID: ", item.ID, "State: ", item.UpdatedAt)
+                fmt.Println("ID: ", item.ID, " Update at: ", item.UpdatedAt)
 		for {
 			time.Sleep(500 * time.Millisecond)
 			ticks++
@@ -104,7 +104,7 @@ func showTasks(c *client.Client, id string, showLogs bool) bool {
 			fmt.Println("\n")
 			fmt.Println("Printing service logs")
 			fmt.Printf("Exit code: %d\n", v.Status.ContainerStatus.ExitCode)
-			fmt.Printf("State: %d", v.Status.State)
+			fmt.Printf("State: %d\n", v.Status.State)
 
 			if showLogs == true {
 				logRequest, _ := c.ServiceLogs(context.Background(), id, types.ContainerLogsOptions{
