@@ -21,8 +21,10 @@ func main() {
 	var image string
 	var timeout int
 	var showlogs bool
-
+	var network string
 	flag.StringVar(&image, "image", "", "Docker image name")
+	flag.StringVar(&network, "network", "", "Docker swarm network name")
+
 	flag.BoolVar(&showlogs, "showlogs", true, "show logs from stdout")
 	flag.IntVar(&timeout, "timeout", 0, "ticks until we time out the service")
 	flag.Parse()
@@ -40,9 +42,19 @@ func main() {
 	}
 
 	spec := makeSpec(image)
+	if len(network) > 0 {
+		nets := []swarm.NetworkAttachmentConfig{
+			swarm.NetworkAttachmentConfig{Target: network},
+		}
+		spec.Networks = nets
+	}
+
 	createOptions := types.ServiceCreateOptions{}
 	createResponse, _ := c.ServiceCreate(context.Background(), spec, createOptions)
-	fmt.Printf("Service created: %s\n", createResponse.ID)
+	// fmt.Printf("Service created: %s\n", createResponse.ID)
+
+	service, _, _ := c.ServiceInspectWithRaw(context.Background(), createResponse.ID)
+	fmt.Printf("Service created: %s (%s)\n", service.Spec.Name, createResponse.ID)
 
 	pollTask(c, createResponse.ID, timeout, showlogs)
 }
@@ -74,7 +86,7 @@ func pollTask(c *client.Client, id string, timeout int, showlogs bool) {
 	list, _ := c.ServiceList(context.Background(), opts)
 	for _, item := range list {
 		ticks := 0
-                fmt.Println("ID: ", item.ID, " Update at: ", item.UpdatedAt)
+		fmt.Println("ID: ", item.ID, " Update at: ", item.UpdatedAt)
 		for {
 			time.Sleep(500 * time.Millisecond)
 			ticks++
@@ -104,7 +116,7 @@ func showTasks(c *client.Client, id string, showLogs bool) bool {
 			fmt.Println("\n")
 			fmt.Println("Printing service logs")
 			fmt.Printf("Exit code: %d\n", v.Status.ContainerStatus.ExitCode)
-			fmt.Printf("State: %d\n", v.Status.State)
+			fmt.Printf("State: %s\n", v.Status.State)
 
 			if showLogs == true {
 				logRequest, _ := c.ServiceLogs(context.Background(), id, types.ContainerLogsOptions{
