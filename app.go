@@ -16,12 +16,32 @@ import (
 	"golang.org/x/net/context"
 )
 
+type listFlag []string
+
+func (i *listFlag) String() string {
+	str := ""
+	for _, v := range *i {
+		str += v
+	}
+	return str
+}
+
+func (i *listFlag) Set(value string) error {
+	*i = append(*i, value)
+	return nil
+}
+
 // Enable Docker's experimental mode in 1.13-rc before continuing.
 func main() {
 	var image string
 	var timeout int
 	var showlogs bool
 	var network string
+
+	var envVars listFlag
+
+	flag.Var(&envVars, "env", "environmental variables")
+
 	flag.StringVar(&image, "image", "", "Docker image name")
 	flag.StringVar(&network, "network", "", "Docker swarm network name")
 
@@ -41,7 +61,7 @@ func main() {
 		log.Fatal("Error with Docker client.")
 	}
 
-	spec := makeSpec(image)
+	spec := makeSpec(image, &envVars)
 	if len(network) > 0 {
 		nets := []swarm.NetworkAttachmentConfig{
 			swarm.NetworkAttachmentConfig{Target: network},
@@ -51,7 +71,6 @@ func main() {
 
 	createOptions := types.ServiceCreateOptions{}
 	createResponse, _ := c.ServiceCreate(context.Background(), spec, createOptions)
-	// fmt.Printf("Service created: %s\n", createResponse.ID)
 
 	service, _, _ := c.ServiceInspectWithRaw(context.Background(), createResponse.ID)
 	fmt.Printf("Service created: %s (%s)\n", service.Spec.Name, createResponse.ID)
@@ -59,8 +78,9 @@ func main() {
 	pollTask(c, createResponse.ID, timeout, showlogs)
 }
 
-func makeSpec(image string) swarm.ServiceSpec {
+func makeSpec(image string, envVars *listFlag) swarm.ServiceSpec {
 	max := uint64(1)
+
 	spec := swarm.ServiceSpec{
 		TaskTemplate: swarm.TaskSpec{
 			RestartPolicy: &swarm.RestartPolicy{
@@ -69,6 +89,7 @@ func makeSpec(image string) swarm.ServiceSpec {
 			},
 			ContainerSpec: swarm.ContainerSpec{
 				Image: image,
+				Env:   *envVars,
 			},
 		},
 	}
