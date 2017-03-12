@@ -1,10 +1,16 @@
 # Ad-hoc Jobs as a Service (JaaS)
 
-This project provides a simple Golang CLI tool that binds to the Docker Swarm API to create an ad-hoc/one-shot Service and then poll until it exits. Service logs can also be retrieved if the experimental feature is enabled on your Docker Engine.
+This project provides a simple Golang CLI tool that binds to the Docker Swarm API to create an ad-hoc/one-shot Service and then poll until it exits. Service logs can also be retrieved if the experimental feature is enabled on the Docker daemon.
+
+**Motivation and context**
+
+For a blog post covering use-cases for JaaS and more on the portions of the Docker API used see below:
+
+* [Blog: One-shot containers on Docker Swarm](http://blog.alexellis.io/containers-on-swarm/)
 
 ## Contributions are welcome
 
-This is the contribution process for any of my repos.
+This is the contribution process for this repo.
 
 * Raise a Github issue with the proposed change/idea
 * I'll mark the issue as a feature/bug fix etc for the changelog
@@ -17,7 +23,7 @@ This is the contribution process for any of my repos.
 
 ### Pre-requisites:
 
-* Docker 1.13-RC (in experimental mode for service logs)
+* Docker 1.13 or newer (experimental mode must be enabled if accessing service logs)
 * Go 1.7.3 (or Golang container)
 
 * Build the code:
@@ -62,8 +68,9 @@ You can also run `jaas` in a container, but the syntax becomes slightly more ver
 
 ### Roadmap:
 
-I'd like suggestions on what else you need to make this usable.
+Here are several features / enhancements on the roadmap, please make additional suggestions through Github issues.
 
+* [ ] Extract stdout/stderr etc from logs in human readable format similar to `docker logs`
 * [ ] Optionally delete service after fetching exit code/logs
 * [ ] Support optional secrets through CLI flag
 * [ ] Validation around images which are not in local library
