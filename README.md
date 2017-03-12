@@ -23,7 +23,7 @@ This is the contribution process for any of my repos.
 * Build the code:
 
 ```
-# go build
+# go install
 ```
 
 * Enable Swarm Mode
@@ -40,7 +40,7 @@ You can have a multi-node swarm but make sure whatever image you choose is avail
 
 ```
 # docker pull alexellis2/cows:latest
-# ./jaas -image alexellis2/cows:latest
+# jaas -image alexellis2/cows:latest
 ```
 
 * Hiding logs
@@ -48,7 +48,7 @@ You can have a multi-node swarm but make sure whatever image you choose is avail
 If you aren't interested in the output logs then run it with the `--showlogs=false` override:
 
 ```
-# ./jaas -image alexellis2/cows:latest --showlogs=false
+# jaas -image alexellis2/cows:latest --showlogs=false
 ```
 
 * Running jaas in a container
