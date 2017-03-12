@@ -59,6 +59,14 @@ If you aren't interested in the output logs then run it with the `--showlogs=fal
 # jaas -image alexellis2/cows:latest --showlogs=false
 ```
 
+* Removing service after completion
+
+To remove the service after it completes, run with the `-rm` flag:
+
+```
+# ./jaas -image alexellis2/cows:latest -rm
+```
+
 * Running jaas in a container
 
 You can also run `jaas` in a container, but the syntax becomes slightly more verbose:
@@ -73,7 +81,7 @@ You can also run `jaas` in a container, but the syntax becomes slightly more ver
 Here are several features / enhancements on the roadmap, please make additional suggestions through Github issues.
 
 * [ ] Extract stdout/stderr etc from logs in human readable format similar to `docker logs`
-* [ ] Optionally delete service after fetching exit code/logs
+* [x] Optionally delete service after fetching exit code/logs
 * [ ] Support optional secrets through CLI flag
 * [ ] Validation around images which are not in local library
 * [x] Support passing environmental variables

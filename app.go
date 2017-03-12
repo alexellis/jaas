@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"time"
+	"os"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
@@ -37,6 +38,7 @@ func main() {
 	var timeout int
 	var showlogs bool
 	var network string
+	var removeService bool
 
 	var envVars listFlag
 
@@ -46,6 +48,7 @@ func main() {
 	flag.StringVar(&network, "network", "", "Docker swarm network name")
 
 	flag.BoolVar(&showlogs, "showlogs", true, "show logs from stdout")
+	flag.BoolVar(&removeService, "rm", false, "remove service after completion")
 	flag.IntVar(&timeout, "timeout", 0, "ticks until we time out the service")
 	flag.Parse()
 
@@ -75,7 +78,7 @@ func main() {
 	service, _, _ := c.ServiceInspectWithRaw(context.Background(), createResponse.ID)
 	fmt.Printf("Service created: %s (%s)\n", service.Spec.Name, createResponse.ID)
 
-	pollTask(c, createResponse.ID, timeout, showlogs)
+	pollTask(c, createResponse.ID, timeout, showlogs, removeService)
 }
 
 func makeSpec(image string, envVars *listFlag) swarm.ServiceSpec {
@@ -96,7 +99,7 @@ func makeSpec(image string, envVars *listFlag) swarm.ServiceSpec {
 	return spec
 }
 
-func pollTask(c *client.Client, id string, timeout int, showlogs bool) {
+func pollTask(c *client.Client, id string, timeout int, showlogs, removeService bool) {
 	filters2 := filters.NewArgs()
 	filters2.Add("id", id)
 
@@ -111,7 +114,7 @@ func pollTask(c *client.Client, id string, timeout int, showlogs bool) {
 		for {
 			time.Sleep(500 * time.Millisecond)
 			ticks++
-			if showTasks(c, item.ID, showlogs) {
+			if showTasks(c, item.ID, showlogs, removeService) {
 				return
 			}
 
@@ -123,7 +126,7 @@ func pollTask(c *client.Client, id string, timeout int, showlogs bool) {
 	}
 }
 
-func showTasks(c *client.Client, id string, showLogs bool) bool {
+func showTasks(c *client.Client, id string, showLogs, removeService bool) bool {
 	filters1 := filters.NewArgs()
 	filters1.Add("service", id)
 	// fmt.Println("Task filter: ", id)
@@ -143,7 +146,7 @@ func showTasks(c *client.Client, id string, showLogs bool) bool {
 				fmt.Println("Printing service logs")
 			}
 
-			if showLogs == true {
+			if showLogs {
 				logRequest, _ := c.ServiceLogs(context.Background(), id, types.ContainerLogsOptions{
 					Follow:     false,
 					ShowStdout: true,
@@ -157,6 +160,13 @@ func showTasks(c *client.Client, id string, showLogs bool) bool {
 				res, _ := ioutil.ReadAll(logRequest)
 
 				fmt.Println(string(res[:]))
+			}
+
+			if removeService {
+				fmt.Println("Removing service...")
+				if err := c.ServiceRemove(context.Background(), id); err != nil {
+					fmt.Fprintln(os.Stderr, err)
+				}
 			}
 
 			done = true
