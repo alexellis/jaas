@@ -31,7 +31,6 @@ func (i *listFlag) Set(value string) error {
 	return nil
 }
 
-// Enable Docker's experimental mode in 1.13-rc before continuing.
 func main() {
 	var image string
 	var timeout int
@@ -60,6 +59,15 @@ func main() {
 	if err != nil {
 		log.Fatal("Error with Docker client.")
 	}
+
+	// Check that experimental mode is enabled on the daemon, fall back to no logging if not
+	if showlogs {
+		if versionInfo, _ := c.ServerVersion(context.Background()); !versionInfo.Experimental {
+			fmt.Println("Experimental daemon required to display service logs, falling back to no log display.")
+			showlogs = false
+		}
+	}
+	
 
 	spec := makeSpec(image, &envVars)
 	if len(network) > 0 {
