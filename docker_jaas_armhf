@@ -1,0 +1,4 @@
+#!/bin/sh
+docker run -ti -v /var/run/docker.sock:/var/run/docker.sock alexellis2/jaas-armhf ./jaas --showlogs=false $@
+
+

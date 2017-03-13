@@ -135,9 +135,13 @@ func showTasks(c *client.Client, id string, showLogs bool) bool {
 	for _, v := range val {
 		if v.Status.State == swarm.TaskStateComplete {
 			fmt.Println("\n")
-			fmt.Println("Printing service logs")
 			fmt.Printf("Exit code: %d\n", v.Status.ContainerStatus.ExitCode)
 			fmt.Printf("State: %s\n", v.Status.State)
+			fmt.Println("\n")
+
+			if showLogs {
+				fmt.Println("Printing service logs")
+			}
 
 			if showLogs == true {
 				logRequest, _ := c.ServiceLogs(context.Background(), id, types.ContainerLogsOptions{
