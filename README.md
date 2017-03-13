@@ -2,6 +2,8 @@
 
 This project provides a simple Golang CLI tool that binds to the Docker Swarm API to create an ad-hoc/one-shot Service and then poll until it exits. Service logs can also be retrieved if the experimental feature is enabled on the Docker daemon.
 
+[![Build Status](https://travis-ci.org/alexellis/jaas.svg?branch=master)](https://travis-ci.org/alexellis/jaas)
+
 **Motivation and context**
 
 For a blog post covering use-cases for JaaS and more on the portions of the Docker API used see below:
