@@ -48,7 +48,7 @@ You can have a multi-node swarm but make sure whatever image you choose is avail
 
 ```
 # docker pull alexellis2/cows:latest
-# jaas -image alexellis2/cows:latest
+# jaas -rm -image alexellis2/cows:latest
 ```
 
 * Hiding logs
@@ -64,7 +64,20 @@ If you aren't interested in the output logs then run it with the `--showlogs=fal
 To remove the service after it completes, run with the `-rm` flag:
 
 ```
-# ./jaas -image alexellis2/cows:latest -rm
+# jaas -image alexellis2/href-counter:latest --env url=http://blog.alexellis.io/ --showlogs=true
+
+Service created: peaceful_shirley (uva6bcqyubm1b4c80dghjhb44)
+ID:  uva6bcqyubm1b4c80dghjhb44  Update at:  2017-03-14 22:19:54.381973142 +0000 UTC
+...
+
+Exit code: 0
+State: complete
+
+
+Printing service logs
+?2017-03-14T22:19:55.660902727Z com.docker.swarm.node.id=b2dqydhfavwezorhkqi11f962,com.docker.swarm.service.id=uva6bcqyubm1b4c80dghjhb44,com.docker.swarm.task.id=yruxuawdipz2v5n0wvvm8ib0r {"internal":42,"external":2}
+
+Removing service...
 ```
 
 * Running jaas in a container
@@ -80,11 +93,11 @@ You can also run `jaas` in a container, but the syntax becomes slightly more ver
 
 Here are several features / enhancements on the roadmap, please make additional suggestions through Github issues.
 
-* [ ] Extract stdout/stderr etc from logs in human readable format similar to `docker logs`
 * [x] Optionally delete service after fetching exit code/logs
+* [x] Support passing environmental variables
+* [ ] Extract stdout/stderr etc from logs in human readable format similar to `docker logs`
 * [ ] Support optional secrets through CLI flag
 * [ ] Validation around images which are not in local library
-* [x] Support passing environmental variables
 
 ### Future:
 
