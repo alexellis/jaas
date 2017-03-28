@@ -31,6 +31,7 @@ This is the contribution process for this repo.
 * Build the code:
 
 ```
+# go get -v
 # go install
 ```
 
