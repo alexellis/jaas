@@ -4,8 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"time"
 	"os"
+	"time"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
@@ -70,7 +70,6 @@ func main() {
 			showlogs = false
 		}
 	}
-	
 
 	spec := makeSpec(image, &envVars)
 	if len(network) > 0 {
@@ -82,11 +81,16 @@ func main() {
 
 	createOptions := types.ServiceCreateOptions{}
 	createResponse, _ := c.ServiceCreate(context.Background(), spec, createOptions)
+	opts := types.ServiceInspectOptions{InsertDefaults: true}
 
-	service, _, _ := c.ServiceInspectWithRaw(context.Background(), createResponse.ID)
+	service, _, _ := c.ServiceInspectWithRaw(context.Background(), createResponse.ID, opts)
 	fmt.Printf("Service created: %s (%s)\n", service.Spec.Name, createResponse.ID)
 
-	pollTask(c, createResponse.ID, timeout, showlogs, removeService)
+	success := pollTask(c, createResponse.ID, timeout, showlogs, removeService)
+
+	if success == false {
+		os.Exit(1)
+	}
 }
 
 func makeSpec(image string, envVars *listFlag) swarm.ServiceSpec {
@@ -107,7 +111,7 @@ func makeSpec(image string, envVars *listFlag) swarm.ServiceSpec {
 	return spec
 }
 
-func pollTask(c *client.Client, id string, timeout int, showlogs, removeService bool) {
+func pollTask(c *client.Client, id string, timeout int, showlogs, removeService bool) bool {
 	filters2 := filters.NewArgs()
 	filters2.Add("id", id)
 
@@ -123,15 +127,16 @@ func pollTask(c *client.Client, id string, timeout int, showlogs, removeService 
 			time.Sleep(500 * time.Millisecond)
 			ticks++
 			if showTasks(c, item.ID, showlogs, removeService) {
-				return
+				return true
 			}
 
 			if timeout > 0 && ticks >= timeout {
 				fmt.Printf("Timing out after %d ticks.", ticks)
-				return
+				return false
 			}
 		}
 	}
+	return false
 }
 
 func showTasks(c *client.Client, id string, showLogs, removeService bool) bool {
