@@ -23,17 +23,24 @@ This is the contribution process for this repo.
 
 ## Get started
 
-### Pre-requisites:
+### Build and install the code
+
+Pre-requisites:
 
 * Docker 1.13 or newer (experimental mode must be enabled if accessing service logs)
 * Go 1.7.3 (or Golang container)
 
-* Build the code:
+**Run these commands**
 
 ```
-# go get -v
+# export GOPATH=$HOME/go
+# go get -d -v github.com/alexellis/jaas
+# cd $GOPATH/src/github.com/alexellis/jaas
 # go install
+# export PATH=$PATH:$GOPATH/bin
 ```
+
+Now test `jaas` with `jaas --help`
 
 * Enable Swarm Mode
 
@@ -41,9 +48,13 @@ This is the contribution process for this repo.
 # docker swarm init
 ```
 
+*Notes on images*
+
 You can have a multi-node swarm but make sure whatever image you choose is available in an accessible registry.
 
 > A local image will not need to be pushed to a registry.
+
+### Running a task / batch job / one-shot container
 
 * Run your first one-shot container:
 
