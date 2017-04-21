@@ -29,6 +29,7 @@ Pre-requisites:
 
 * Docker 1.13 or newer (experimental mode must be enabled if accessing service logs)
 * [Go 1.7.3 (or Golang container)](https://golang.org/dl/)
+* Enable Swarm Mode (`docker swarm init`)
 
 **Run these commands**
 
@@ -42,26 +43,17 @@ Pre-requisites:
 
 Now test `jaas` with `jaas --help`
 
-* Enable Swarm Mode
-
-```
-# docker swarm init
-```
-
-*Notes on images*
-
-You can have a multi-node swarm but make sure whatever image you choose is available in an accessible registry.
-
-> A local image will not need to be pushed to a registry.
-
 ### Running a task / batch job / one-shot container
 
 * Run your first one-shot container:
 
 ```
-# docker pull alexellis2/cows:latest
 # jaas -rm -image alexellis2/cows:latest
 ```
+
+The `-rm` flag removes the Swarm service that was used to run your container. 
+
+> The exit code from your container will also be available, you can check it with `echo $?`
 
 * Hiding logs
 
@@ -92,6 +84,12 @@ Printing service logs
 Removing service...
 ```
 
+*Notes on images*
+
+You can have a multi-node swarm but make sure whatever image you choose is available in an accessible registry.
+
+> A local image will not need to be pushed to a registry.
+
 * Running jaas in a container
 
 You can also run `jaas` in a container, but the syntax becomes slightly more verbose:
@@ -110,6 +108,7 @@ Here are several features / enhancements on the roadmap, please make additional 
 * [ ] Extract stdout/stderr etc from logs in human readable format similar to `docker logs`
 * [ ] Support optional secrets through CLI flag
 * [ ] Validation around images which are not in local library
+* [ ] Support constraints on where to run tasks
 
 ### Future:
 
