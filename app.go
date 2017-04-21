@@ -48,7 +48,7 @@ func main() {
 
 	flag.BoolVar(&showlogs, "showlogs", true, "show logs from stdout")
 	flag.BoolVar(&removeService, "rm", false, "remove service after completion")
-	flag.IntVar(&timeout, "timeout", 0, "ticks until we time out the service")
+	flag.IntVar(&timeout, "timeout", 60, "ticks until we time out the service - default is 60 seconds")
 	flag.Parse()
 
 	if len(image) == 0 {
