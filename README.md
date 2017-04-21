@@ -28,7 +28,7 @@ This is the contribution process for this repo.
 Pre-requisites:
 
 * Docker 1.13 or newer (experimental mode must be enabled if accessing service logs)
-* Go 1.7.3 (or Golang container)
+* [Go 1.7.3 (or Golang container)](https://golang.org/dl/)
 
 **Run these commands**
 
