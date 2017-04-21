@@ -177,19 +177,23 @@ func showTasks(c *client.Client, id string, showLogs, removeService bool) (int, 
 			}
 
 			if showLogs {
-				logRequest, _ := c.ServiceLogs(context.Background(), id, types.ContainerLogsOptions{
+				logRequest, err := c.ServiceLogs(context.Background(), id, types.ContainerLogsOptions{
 					Follow:     false,
 					ShowStdout: true,
 					ShowStderr: true,
 					Timestamps: true,
 					Details:    false,
 				})
-				defer logRequest.Close()
+				if err != nil {
+					fmt.Printf("Unable to pull service logs.\nError: %s", err)
+				} else {
+					defer logRequest.Close()
 
-				//	, ShowStderr: true, ShowStdout: true})
-				res, _ := ioutil.ReadAll(logRequest)
+					//	, ShowStderr: true, ShowStdout: true})
+					res, _ := ioutil.ReadAll(logRequest)
 
-				fmt.Println(string(res[:]))
+					fmt.Println(string(res[:]))
+				}
 			}
 
 			if removeService {
