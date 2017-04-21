@@ -183,7 +183,9 @@ func showTasks(c *client.Client, id string, showLogs, removeService bool) (int, 
 					ShowStderr: true,
 					Timestamps: true,
 					Details:    false,
+					Tail:       "all",
 				})
+
 				if err != nil {
 					fmt.Printf("Unable to pull service logs.\nError: %s", err)
 				} else {
