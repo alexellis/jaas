@@ -65,8 +65,16 @@ func main() {
 	}
 
 	// Check that experimental mode is enabled on the daemon, fall back to no logging if not
+	versionInfo, versionErr := c.ServerVersion(context.Background())
+	if versionErr != nil {
+		log.Fatal("Is the Docker Daemon running?")
+
+		return
+	}
+
 	if showlogs {
-		if versionInfo, _ := c.ServerVersion(context.Background()); !versionInfo.Experimental {
+
+		if versionInfo.Experimental == false {
 			fmt.Println("Experimental daemon required to display service logs, falling back to no log display.")
 			showlogs = false
 		}
