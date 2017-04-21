@@ -60,7 +60,8 @@ func main() {
 	var err error
 	c, err = client.NewEnvClient()
 	if err != nil {
-		log.Fatal("Error with Docker client.")
+		log.Fatal("Is the Docker Daemon running?")
+		return
 	}
 
 	// Check that experimental mode is enabled on the daemon, fall back to no logging if not
