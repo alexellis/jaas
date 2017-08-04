@@ -38,6 +38,7 @@ func main() {
 	var showlogs bool
 	var network string
 	var removeService bool
+	var registry string
 
 	var envVars listFlag
 
@@ -49,6 +50,9 @@ func main() {
 	flag.BoolVar(&showlogs, "showlogs", true, "show logs from stdout")
 	flag.BoolVar(&removeService, "rm", false, "remove service after completion")
 	flag.IntVar(&timeout, "timeout", 60, "ticks until we time out the service - default is 60 seconds")
+
+	flag.StringVar(&registry, "registryAuth", "", "pass your registry authentication")
+
 	flag.Parse()
 
 	if len(image) == 0 {
@@ -89,6 +93,12 @@ func main() {
 	}
 
 	createOptions := types.ServiceCreateOptions{}
+
+	if len(registry) > 0 {
+		createOptions.EncodedRegistryAuth = registry
+		fmt.Println("Using auth: " + registry)
+	}
+
 	createResponse, _ := c.ServiceCreate(context.Background(), spec, createOptions)
 	opts := types.ServiceInspectOptions{InsertDefaults: true}
 
@@ -109,7 +119,7 @@ func makeSpec(image string, envVars *listFlag) swarm.ServiceSpec {
 				MaxAttempts: &max,
 				Condition:   swarm.RestartPolicyConditionNone,
 			},
-			ContainerSpec: swarm.ContainerSpec{
+			ContainerSpec: &swarm.ContainerSpec{
 				Image: image,
 				Env:   *envVars,
 			},
