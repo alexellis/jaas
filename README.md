@@ -95,8 +95,8 @@ You can have a multi-node swarm but make sure whatever image you choose is avail
 You can also run `jaas` in a container, but the syntax becomes slightly more verbose:
 
 ```
-# docker build -t jaas .
-# docker run -ti -v /var/run/docker.sock:/var/run/docker.sock jaas -image alexellis2/cows:latest
+# docker run -ti -v /var/run/docker.sock:/var/run/docker.sock \
+  alexellis2/jaas -image alexellis2/cows:latest
 ```
 
 ### Roadmap:
