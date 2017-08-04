@@ -105,10 +105,14 @@ Here are several features / enhancements on the roadmap, please make additional 
 
 * [x] Optionally delete service after fetching exit code/logs
 * [x] Support passing environmental variables
-* [ ] Extract stdout/stderr etc from logs in human readable format similar to `docker logs`
+* [x] Support private registry auth via `-registryAuth` flag
+
+Todo:
+
+* [ ] Support constraints on where to run tasks
 * [ ] Support optional secrets through CLI flag
 * [ ] Validation around images which are not in local library
-* [ ] Support constraints on where to run tasks
+* [ ] Extract stdout/stderr etc from logs in human readable format similar to `docker logs`
 
 ### Future:
 
