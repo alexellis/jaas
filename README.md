@@ -10,6 +10,12 @@ For a blog post covering use-cases for JaaS and more on the portions of the Dock
 
 * [Blog: One-shot containers on Docker Swarm](http://blog.alexellis.io/containers-on-swarm/)
 
+**Related - Serverless**
+
+If you would like to build Serverless applications with Docker Swarm or Kubernetes checkout my write-up on OpenFaaS:
+
+* [Introducing Functions as a Service (FaaS)](https://blog.alexellis.io/introducing-functions-as-a-service/)
+
 ## Contributions are welcome
 
 This is the contribution process for this repo.
