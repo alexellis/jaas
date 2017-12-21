@@ -90,6 +90,15 @@ Printing service logs
 Removing service...
 ```
 
+* Using registryAuth
+
+To enable pulling from secured registries you can use the `-registryAuth` parameter:
+```
+# export auth='{ "username" : "myUserName", "password" : "secret", "email" : "my@email", "serveraddress" : "my.reg.domain" }'
+# export encAuth=`echo $auth | base64`
+# jaas -registryAuth="$encAuth" -image my.reg.domain/hello-world:latest
+```
+
 *Notes on images*
 
 You can have a multi-node swarm but make sure whatever image you choose is available in an accessible registry.
