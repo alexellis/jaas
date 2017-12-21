@@ -39,7 +39,7 @@ func main() {
 	var network string
 	var removeService bool
 	var registry string
-
+	var constraints listFlag
 	var envVars listFlag
 
 	flag.Var(&envVars, "env", "environmental variables")
@@ -52,6 +52,8 @@ func main() {
 	flag.IntVar(&timeout, "timeout", 60, "ticks until we time out the service - default is 60 seconds")
 
 	flag.StringVar(&registry, "registryAuth", "", "pass your registry authentication")
+
+	flag.Var(&constraints, "constraint", "Placement constraints (e.g. node.labels.key==value)")
 
 	flag.Parse()
 
@@ -97,6 +99,12 @@ func main() {
 	if len(registry) > 0 {
 		createOptions.EncodedRegistryAuth = registry
 		fmt.Println("Using auth: " + registry)
+	}
+
+	placement := &swarm.Placement{}
+	if len(constraints) > 0 {
+		placement.Constraints = constraints
+		spec.TaskTemplate.Placement = placement
 	}
 
 	createResponse, _ := c.ServiceCreate(context.Background(), spec, createOptions)
