@@ -1,4 +1,4 @@
-FROM golang:1.7.3
+FROM golang:1.9.2-alpine3.7 AS build
 MAINTAINER alexellis2@gmail.com
 
 RUN mkdir -p /go/src/github.com/alexellis2/jaas
@@ -7,4 +7,8 @@ COPY . .
 
 RUN go build
 
-ENTRYPOINT ["./jaas"]
+FROM alpine
+
+COPY --from=build /go/src/github.com/alexellis2/jaas/jaas /jaas
+
+ENTRYPOINT ["/jaas"]
