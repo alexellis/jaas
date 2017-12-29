@@ -10,22 +10,17 @@ For a blog post covering use-cases for JaaS and more on the portions of the Dock
 
 * [Blog: One-shot containers on Docker Swarm](http://blog.alexellis.io/containers-on-swarm/)
 
-**Related - Serverless**
+**See also: Serverless**
 
 If you would like to build Serverless applications with Docker Swarm or Kubernetes checkout my write-up on OpenFaaS:
 
-* [Introducing Functions as a Service (FaaS)](https://blog.alexellis.io/introducing-functions-as-a-service/)
+* [OpenFaaS.com](https://www.openfaas.com)
+
+The OpenFaaS project has dozens of contributors and thousands of GitHub stars - if you're here because you want to run short-lived functions then I highly recommend checking out OpenFaaS now.
 
 ## Contributions are welcome
 
-This is the contribution process for this repo.
-
-* Raise a Github issue with the proposed change/idea
-* I'll mark the issue as a feature/bug fix etc for the changelog
-* This gives us a chance to discuss the idea
-* If everything sounds good then go ahead and work on the PR
- * Please link to the bug and explain how you tested the change
-* I'll merge after reviewing/testing
+See the [contributing guide](CONTRIBUTING.md) and do not raise a PR unless you've read it all.
 
 ## Get started
 
@@ -34,7 +29,7 @@ This is the contribution process for this repo.
 Pre-requisites:
 
 * Docker 1.13 or newer (experimental mode must be enabled if accessing service logs)
-* [Go 1.7.3 (or Golang container)](https://golang.org/dl/)
+* [Go 1.9.2 (or Golang container)](https://golang.org/dl/)
 * Enable Swarm Mode (`docker swarm init`)
 
 **Run these commands**

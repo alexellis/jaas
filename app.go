@@ -5,14 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/api/types/swarm"
 	"github.com/docker/docker/client"
-
-	"io/ioutil"
 
 	"golang.org/x/net/context"
 )
@@ -126,100 +122,4 @@ func makeSpec(image string, envVars *listFlag) swarm.ServiceSpec {
 		},
 	}
 	return spec
-}
-
-const swarmError = -999
-const timeoutError = -998
-
-func pollTask(c *client.Client, id string, timeout int, showlogs, removeService bool) int {
-	filters2 := filters.NewArgs()
-	filters2.Add("id", id)
-
-	exitCode := swarmError
-
-	opts := types.ServiceListOptions{
-		Filters: filters2,
-	}
-
-	list, _ := c.ServiceList(context.Background(), opts)
-	for _, item := range list {
-		ticks := 0
-		fmt.Println("ID: ", item.ID, " Update at: ", item.UpdatedAt)
-		for {
-			time.Sleep(500 * time.Millisecond)
-			ticks++
-			taskExitCode, found := showTasks(c, item.ID, showlogs, removeService)
-			if found {
-				exitCode = taskExitCode
-				break
-			}
-
-			if timeout > 0 && ticks >= timeout {
-				fmt.Printf("Timing out after %d ticks.", ticks)
-				return timeoutError
-			}
-		}
-	}
-
-	return exitCode
-}
-
-func showTasks(c *client.Client, id string, showLogs, removeService bool) (int, bool) {
-	filters1 := filters.NewArgs()
-	filters1.Add("service", id)
-	// fmt.Println("Task filter: ", id)
-	val, _ := c.TaskList(context.Background(), types.TaskListOptions{
-		Filters: filters1,
-	})
-
-	exitCode := 1
-	var done bool
-	for _, v := range val {
-		if v.Status.State == swarm.TaskStateComplete {
-			fmt.Println("\n")
-			fmt.Printf("Exit code: %d\n", v.Status.ContainerStatus.ExitCode)
-			fmt.Printf("State: %s\n", v.Status.State)
-			fmt.Println("\n")
-
-			exitCode = v.Status.ContainerStatus.ExitCode
-			if showLogs {
-				fmt.Println("Printing service logs")
-			}
-
-			if showLogs {
-				logRequest, err := c.ServiceLogs(context.Background(), id, types.ContainerLogsOptions{
-					Follow:     false,
-					ShowStdout: true,
-					ShowStderr: true,
-					Timestamps: true,
-					Details:    false,
-					Tail:       "all",
-				})
-
-				if err != nil {
-					fmt.Printf("Unable to pull service logs.\nError: %s", err)
-				} else {
-					defer logRequest.Close()
-
-					//	, ShowStderr: true, ShowStdout: true})
-					res, _ := ioutil.ReadAll(logRequest)
-
-					fmt.Println(string(res[:]))
-				}
-			}
-
-			if removeService {
-				fmt.Println("Removing service...")
-				if err := c.ServiceRemove(context.Background(), id); err != nil {
-					fmt.Fprintln(os.Stderr, err)
-				}
-			}
-
-			done = true
-			break
-		} else {
-			fmt.Printf(".")
-		}
-	}
-	return exitCode, done
 }

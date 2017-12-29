@@ -1,15 +1,19 @@
-FROM golang:1.7.3
+FROM golang:1.9.2 as build
+
 MAINTAINER alexellis2@gmail.com
-RUN go get -v -d github.com/docker/docker/api/types \
-    && go get -v -d github.com/docker/docker/api/types/filters \
-    && go get -v -d github.com/docker/docker/api/types/swarm \
-    && go get -v -d github.com/docker/docker/client \
-    && go get -v -d golang.org/x/net/context
 
 RUN mkdir -p /go/src/github.com/alexellis2/jaas
 WORKDIR /go/src/github.com/alexellis2/jaas
-COPY ./app.go ./
 
-RUN go build
+COPY app.go         .
+COPY show_tasks.go  .
+COPY poll.go        .
+COPY vendor vendor
 
-ENTRYPOINT ["./jaas"]
+RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags "-s -w" -installsuffix cgo -o /root/jaas
+
+FROM alpine:3.6
+WORKDIR /root/
+COPY --from=build /root/jaas /root/jaas
+
+ENTRYPOINT ["/root/jaas"]
