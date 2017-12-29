@@ -85,13 +85,22 @@ Printing service logs
 Removing service...
 ```
 
-* Using registryAuth
+* Docker authentication for registries
 
-To enable pulling from secured registries you can use the `-registryAuth` parameter:
-```
-# export auth='{ "username" : "myUserName", "password" : "secret", "email" : "my@email", "serveraddress" : "my.reg.domain" }'
-# export encAuth=`echo $auth | base64`
-# jaas -registryAuth="$encAuth" -image my.reg.domain/hello-world:latest
+You can use `jaas` with Docker images in private registries or registries which require authentication.
+
+Just run `docker login` then pass the `-registryAuth` parameter and the encoded string you find in `~/.docker/config.json`.
+
+If you want to encode a string manually then do the following: 
+
+```bash
+$ export auth='{
+    "username" : "myUserName",
+    "password" : "secret",
+    "email" : "my@email",
+    "serveraddress" : "my.reg.domain"
+  }'
+$ jaas -registryAuth="`echo $auth | base64`" -image my.reg.domain/hello-world:latest
 ```
 
 *Notes on images*
