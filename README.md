@@ -1,6 +1,6 @@
 # Ad-hoc Jobs as a Service (JaaS)
 
-This project provides a simple Golang CLI tool that binds to the Docker Swarm API to create an ad-hoc/one-shot Service and then poll until it exits. Service logs can also be retrieved if the experimental feature is enabled on the Docker daemon.
+This project provides a simple Golang CLI tool that binds to the Docker Swarm API to create an ad-hoc/one-shot Service and then poll until it exits. Service logs can also be retrieved if the Docker daemon API version is greater than 1.29 or if the experimental feature is enabled on the Docker daemon.
 
 [![Build Status](https://travis-ci.org/alexellis/jaas.svg?branch=master)](https://travis-ci.org/alexellis/jaas)
 
@@ -28,7 +28,7 @@ See the [contributing guide](CONTRIBUTING.md) and do not raise a PR unless you'v
 
 Pre-requisites:
 
-* Docker 1.13 or newer (experimental mode must be enabled if accessing service logs)
+* Docker 1.13 or newer (experimental mode must be enabled if accessing service logs with Docker versions >= 1.13 and < 1.29)
 * [Go 1.9.2 (or Golang container)](https://golang.org/dl/)
 * Enable Swarm Mode (`docker swarm init`)
 
@@ -52,7 +52,7 @@ Now test `jaas` with `jaas --help`
 # jaas -rm -image alexellis2/cows:latest
 ```
 
-The `-rm` flag removes the Swarm service that was used to run your container. 
+The `-rm` flag removes the Swarm service that was used to run your container.
 
 > The exit code from your container will also be available, you can check it with `echo $?`
 
@@ -91,7 +91,7 @@ You can use `jaas` with Docker images in private registries or registries which 
 
 Just run `docker login` then pass the `-registryAuth` parameter and the encoded string you find in `~/.docker/config.json`.
 
-If you want to encode a string manually then do the following: 
+If you want to encode a string manually then do the following:
 
 ```bash
 $ export auth='{
@@ -103,7 +103,7 @@ $ export auth='{
 $ jaas -registryAuth="`echo $auth | base64`" -image my.reg.domain/hello-world:latest
 ```
 
-*Notes on images*
+_Notes on images_
 
 You can have a multi-node swarm but make sure whatever image you choose is available in an accessible registry.
 
