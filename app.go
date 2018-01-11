@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/swarm"
@@ -73,9 +74,12 @@ func main() {
 	}
 
 	if showlogs {
-
-		if versionInfo.Experimental == false {
-			fmt.Println("Experimental daemon required to display service logs, falling back to no log display.")
+		apiVersion, parseErr := strconv.ParseFloat(versionInfo.APIVersion, 32)
+		if parseErr != nil {
+			apiVersion = 0
+		}
+		if apiVersion < 1.29 && versionInfo.Experimental == false {
+			fmt.Println("Experimental daemon or Docker API Version 1.29+ required to display service logs, falling back to no log display.")
 			showlogs = false
 		}
 	}
