@@ -48,12 +48,22 @@ var runCmd = &cobra.Command{
 }
 
 func runRun(cmd *cobra.Command, args []string) error {
-
 	err := runTask(taskRequest)
 	return err
 }
 
+func validate(taskRequest TaskRequest) error {
+	if len(taskRequest.Image) == 0 {
+		return fmt.Errorf("must a valid supply --image")
+	}
+	return nil
+}
+
 func runTask(taskRequest TaskRequest) error {
+	if validationErr := validate(taskRequest); validationErr != nil {
+		return validationErr
+	}
+
 	if verbose {
 		fmt.Printf("Running.. OK %s\n", taskRequest.Image)
 		fmt.Printf("Connected to.. OK %s\n", taskRequest.Networks)
@@ -74,8 +84,8 @@ func runTask(taskRequest TaskRequest) error {
 	var err error
 	c, err = client.NewEnvClient()
 	if err != nil {
-		log.Fatal("Is the Docker Daemon running?")
-		return err
+
+		return fmt.Errorf("is the Docker Daemon running? Error: %s", err.Error())
 	}
 
 	// Check that experimental mode is enabled on the daemon, fall back to no logging if not
@@ -188,20 +198,40 @@ func showTasks(c *client.Client, id string, showLogs, removeService bool) (int, 
 	filters1 := filters.NewArgs()
 	filters1.Add("service", id)
 
-	val, _ := c.TaskList(context.Background(), types.TaskListOptions{
+	tasks, _ := c.TaskList(context.Background(), types.TaskListOptions{
 		Filters: filters1,
 	})
 
 	exitCode := 1
 	var done bool
-	for _, v := range val {
-		if v.Status.State == swarm.TaskStateComplete {
+	stopStates := []swarm.TaskState{
+		swarm.TaskStateComplete,
+		swarm.TaskStateFailed,
+		swarm.TaskStateRejected,
+	}
+
+	for _, task := range tasks {
+
+		stop := false
+		for _, stopState := range stopStates {
+			if task.Status.State == stopState {
+				stop = true
+				break
+			}
+		}
+
+		if stop {
 			fmt.Printf("\n\n")
-			fmt.Printf("Exit code: %d\n", v.Status.ContainerStatus.ExitCode)
-			fmt.Printf("State: %s\n", v.Status.State)
+			fmt.Printf("Exit code: %d\n", task.Status.ContainerStatus.ExitCode)
+			fmt.Printf("State: %s\n", task.Status.State)
 			fmt.Printf("\n\n")
 
-			exitCode = v.Status.ContainerStatus.ExitCode
+			exitCode = task.Status.ContainerStatus.ExitCode
+
+			if exitCode == 0 && task.Status.State == swarm.TaskStateRejected {
+				exitCode = 255 // force non-zero exit for task rejected
+			}
+
 			if showLogs {
 				fmt.Println("Printing service logs")
 			}
