@@ -8,7 +8,7 @@ This tool will work on the Raspberry Pi / an ARM v6/7 - either running with Go d
 Running:
 
 ```
-$ docker run -ti -v /var/run/docker.sock:/var/run/docker.sock alexellis2/jaas-armhf ./jaas --showlogs=false -env url=http://www.alexellis.io -image=alexellis2/href-counter-armhf
+$ docker run -ti -v /var/run/docker.sock:/var/run/docker.sock alexellis2/jaas-armhf ./jaas run --showlogs=false --env url=http://www.alexellis.io --image=alexellis2/href-counter-armhf
 ```
 
 Building:

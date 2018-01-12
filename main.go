@@ -4,11 +4,9 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	"github.com/alexellis/jaas/cmd"
 )
 
 func main() {
-	hostname, _ := os.Hostname()
-	fmt.Println("Hostname: " + hostname)
+	cmd.Execute()
 }

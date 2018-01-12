@@ -12,6 +12,8 @@ This is the contribution process for this repo.
  * Please link to the bug and explain how you tested the change
 * I'll merge after reviewing/testing
 
+> Note: Dependencies are vendored with [vndr](https://github.com/LK4D4/vndr/blob/master/README.md)
+
 ### License
 
 This project is licensed under the MIT License.
@@ -21,7 +23,7 @@ This project is licensed under the MIT License.
 Please add a Copyright notice to new files you add where this is not already present:
 
 ```
-// Copyright (c) OpenFaaS Project 2017. All rights reserved.
+// Copyright (c) Alex Ellis 2017-2018. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 ```
 

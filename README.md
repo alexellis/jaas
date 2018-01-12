@@ -46,10 +46,10 @@ Now test `jaas` with `jaas --help`
 
 ### Running a task / batch job / one-shot container
 
-* Run your first one-shot container:
+* Run your first one-shot container with `jaas run`:
 
 ```
-# jaas -rm -image alexellis2/cows:latest
+# jaas run -r --image alexellis2/cows:latest
 ```
 
 The `-rm` flag removes the Swarm service that was used to run your container.
@@ -58,18 +58,18 @@ The `-rm` flag removes the Swarm service that was used to run your container.
 
 * Hiding logs
 
-If you aren't interested in the output logs then run it with the `--showlogs=false` override:
+If you aren't interested in the output logs then run it with the `--show-logs=false` override:
 
 ```
-# jaas -image alexellis2/cows:latest --showlogs=false
+# jaas run --image alexellis2/cows:latest --show-logs=false
 ```
 
 * Removing service after completion
 
-To remove the service after it completes, run with the `-rm` flag:
+To remove the service after it completes, run with the `--remove` or `-r` flag:
 
 ```
-# jaas -image alexellis2/href-counter:latest --env url=http://blog.alexellis.io/ --showlogs=true
+# jaas run --image alexellis2/href-counter:latest --env url=http://blog.alexellis.io/
 
 Service created: peaceful_shirley (uva6bcqyubm1b4c80dghjhb44)
 ID:  uva6bcqyubm1b4c80dghjhb44  Update at:  2017-03-14 22:19:54.381973142 +0000 UTC
@@ -77,7 +77,6 @@ ID:  uva6bcqyubm1b4c80dghjhb44  Update at:  2017-03-14 22:19:54.381973142 +0000 
 
 Exit code: 0
 State: complete
-
 
 Printing service logs
 ?2017-03-14T22:19:55.660902727Z com.docker.swarm.node.id=b2dqydhfavwezorhkqi11f962,com.docker.swarm.service.id=uva6bcqyubm1b4c80dghjhb44,com.docker.swarm.task.id=yruxuawdipz2v5n0wvvm8ib0r {"internal":42,"external":2}
@@ -115,7 +114,7 @@ You can also run `jaas` in a container, but the syntax becomes slightly more ver
 
 ```
 # docker run -ti -v /var/run/docker.sock:/var/run/docker.sock \
-  alexellis2/jaas -image alexellis2/cows:latest
+  alexellis2/jaas run --image alexellis2/cows:latest
 ```
 
 ### Roadmap:
@@ -125,10 +124,12 @@ Here are several features / enhancements on the roadmap, please make additional 
 * [x] Optionally delete service after fetching exit code/logs
 * [x] Support passing environmental variables
 * [x] Support private registry auth via `-registryAuth` flag
+* [x] Move to cobra flags/args package for CLI
+* [x] Support constraints on where to run tasks
 
 Todo:
 
-* [ ] Support constraints on where to run tasks
+* [ ] Move vendoring tool to `dep`
 * [ ] Support optional secrets through CLI flag
 * [ ] Validation around images which are not in local library
 * [ ] Extract stdout/stderr etc from logs in human readable format similar to `docker logs`
