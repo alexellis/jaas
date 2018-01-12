@@ -1,4 +1,6 @@
-# Ad-hoc Jobs as a Service (JaaS)
+# Jobs as a Service (JaaS)
+
+> A CLI for running jobs (ad-hoc containers/tasks) on Docker Swarm
 
 This project provides a simple Golang CLI tool that binds to the Docker Swarm API to create an ad-hoc/one-shot Service and then poll until it exits. Service logs can also be retrieved if the Docker daemon API version is greater than 1.29 or if the experimental feature is enabled on the Docker daemon.
 
