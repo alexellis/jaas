@@ -90,7 +90,7 @@ Removing service...
 
 You can use `jaas` with Docker images in private registries or registries which require authentication.
 
-Just run `docker login` then pass the `-registryAuth` parameter and the encoded string you find in `~/.docker/config.json`.
+Just run `docker login` then pass the `--registry` parameter and the encoded string you find in `~/.docker/config.json`.
 
 If you want to encode a string manually then do the following:
 
@@ -101,7 +101,7 @@ $ export auth='{
     "email" : "my@email",
     "serveraddress" : "my.reg.domain"
   }'
-$ jaas -registryAuth="`echo $auth | base64`" -image my.reg.domain/hello-world:latest
+$ jaas run --registry="`echo $auth | base64`" --image my.reg.domain/hello-world:latest
 ```
 
 _Notes on images_
