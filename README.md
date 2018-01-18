@@ -131,7 +131,6 @@ Here are several features / enhancements on the roadmap, please make additional 
 
 Todo:
 
-* [ ] Move vendoring tool to `dep`
 * [ ] Support optional secrets through CLI flag
 * [ ] Validation around images which are not in local library
 * [ ] Extract stdout/stderr etc from logs in human readable format similar to `docker logs`
