@@ -29,7 +29,7 @@ Run ad-hoc commands`,
 }
 
 func executeRoot(cmd *cobra.Command, args []string) error {
-	fmt.Printf("JaaS!")
+	fmt.Printf(figletStr)
 	cmd.Help()
 
 	return nil
