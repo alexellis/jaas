@@ -1,11 +1,15 @@
 FROM golang:1.9.2 as build
 
-MAINTAINER alexellis2@gmail.com
+LABEL maintainer alexellis2@gmail.com
 
 RUN mkdir -p /go/src/github.com/alexellis/jaas
 WORKDIR /go/src/github.com/alexellis/jaas
 
-COPY . .
+COPY .git       .git
+COPY cmd        cmd
+COPY vendor     vendor
+COPY version    version
+COPY main.go    .
 
 RUN VERSION=$(git describe --all --exact-match `git rev-parse HEAD` | grep tags | sed 's/tags\///') \
     && GIT_COMMIT=$(git rev-list -1 HEAD) \
