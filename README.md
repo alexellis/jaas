@@ -73,7 +73,7 @@ To remove the service after it completes, run with the `--remove` or `-r` flag:
 ```
 # jaas run --image alexellis2/href-counter:latest --env url=http://blog.alexellis.io/
 
-Service created: peaceful_shirley (uva6bcqyubm1b4c80dghjhb44)
+Service created: jaas_peaceful_shirley (uva6bcqyubm1b4c80dghjhb44)
 ID:  uva6bcqyubm1b4c80dghjhb44  Update at:  2017-03-14 22:19:54.381973142 +0000 UTC
 ...
 
@@ -85,6 +85,8 @@ Printing service logs
 
 Removing service...
 ```
+
+To help you identify services created with jaas, the service name will be prefixed with jaas.
 
 * Docker authentication for registries
 

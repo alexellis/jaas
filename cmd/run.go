@@ -16,6 +16,7 @@ import (
 	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/api/types/swarm"
 	"github.com/docker/docker/client"
+	"github.com/docker/docker/pkg/namesgenerator"
 
 	"github.com/spf13/cobra"
 )
@@ -127,7 +128,11 @@ func runTask(taskRequest TaskRequest) error {
 		spec.TaskTemplate.Placement = placement
 	}
 
-	createResponse, _ := c.ServiceCreate(context.Background(), spec, createOptions)
+	createResponse, err := c.ServiceCreate(context.Background(), spec, createOptions)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 	opts := types.ServiceInspectOptions{InsertDefaults: true}
 
 	service, _, _ := c.ServiceInspectWithRaw(context.Background(), createResponse.ID, opts)
@@ -153,6 +158,7 @@ func makeSpec(image string, envVars []string) swarm.ServiceSpec {
 			},
 		},
 	}
+	spec.Name = "jaas_" + namesgenerator.GetRandomName(0)
 	return spec
 }
 
