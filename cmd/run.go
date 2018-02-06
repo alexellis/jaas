@@ -36,6 +36,8 @@ func init() {
 	runCmd.PersistentFlags().StringArrayVarP(&taskRequest.EnvVars, "env", "e", []string{}, "environmental variable for task")
 	runCmd.PersistentFlags().StringArrayVarP(&taskRequest.Mounts, "mount", "m", []string{}, "bind-mount a volume the task")
 
+	runCmd.PersistentFlags().StringArrayVar(&taskRequest.EnvFiles, "env-file", []string{}, "populate environment from an envfile for the task")
+
 	runCmd.PersistentFlags().BoolVarP(&taskRequest.ShowLogs, "show-logs", "l", true, "show logs")
 	runCmd.PersistentFlags().StringVarP(&taskRequest.Timeout, "timeout", "t", "60s", "timeout as a Golang duration")
 
@@ -137,6 +139,20 @@ func runTask(taskRequest TaskRequest) error {
 		spec.TaskTemplate.ContainerSpec.Command = strings.Split(taskRequest.Command, " ")
 	}
 
+	if len(taskRequest.EnvFiles) > 0 {
+		for _, file := range taskRequest.EnvFiles {
+			envs, err := readEnvs(file)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "%s", err)
+				os.Exit(1)
+			}
+
+			for _, env := range envs {
+				spec.TaskTemplate.ContainerSpec.Env = append(spec.TaskTemplate.ContainerSpec.Env, env)
+			}
+		}
+	}
+
 	spec.TaskTemplate.ContainerSpec.Mounts = []mount.Mount{}
 	for _, bindMount := range taskRequest.Mounts {
 		parts := strings.Split(bindMount, "=")
@@ -182,6 +198,28 @@ func makeSpec(image string, envVars []string) swarm.ServiceSpec {
 		},
 	}
 	return spec
+}
+
+func readEnvs(file string) ([]string, error) {
+	var err error
+	var envs []string
+
+	data, readErr := ioutil.ReadFile(file)
+	if readErr != nil {
+		return envs, readErr
+	}
+
+	lines := strings.Split(string(data), "\n")
+	for n, line := range lines {
+		if len(line) > 0 {
+			if strings.Index(line, "=") == -1 {
+				err = fmt.Errorf("no seperator found in line %d of env-file %s", n, file)
+				break
+			}
+			envs = append(envs, line)
+		}
+	}
+	return envs, err
 }
 
 const swarmError = -999

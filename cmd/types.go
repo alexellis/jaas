@@ -10,6 +10,7 @@ type TaskRequest struct {
 	Constraints []string
 	EnvVars     []string
 	Mounts      []string
+	EnvFiles    []string
 
 	ShowLogs      bool
 	Timeout       string
