@@ -10,10 +10,12 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
+	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/swarm"
 	"github.com/docker/docker/client"
 
@@ -32,12 +34,16 @@ func init() {
 	runCmd.PersistentFlags().StringArrayVarP(&taskRequest.Networks, "network", "n", []string{}, "provide a network to bind to")
 	runCmd.PersistentFlags().StringArrayVarP(&taskRequest.Constraints, "constraint", "c", []string{}, "constraint for task")
 	runCmd.PersistentFlags().StringArrayVarP(&taskRequest.EnvVars, "env", "e", []string{}, "environmental variable for task")
+	runCmd.PersistentFlags().StringArrayVarP(&taskRequest.Mounts, "mount", "m", []string{}, "bind-mount a volume the task")
+
 	runCmd.PersistentFlags().BoolVarP(&taskRequest.ShowLogs, "show-logs", "l", true, "show logs")
 	runCmd.PersistentFlags().StringVarP(&taskRequest.Timeout, "timeout", "t", "60s", "timeout as a Golang duration")
 
+	runCmd.PersistentFlags().StringVarP(&taskRequest.Command, "command", "d", "", "Command to run")
+
 	runCmd.PersistentFlags().BoolVarP(&taskRequest.RemoveService, "remove", "r", true, "remove service after running task")
 	runCmd.PersistentFlags().StringVarP(&taskRequest.RegistryAuth, "registry", "a", "", "registry auth string in base64")
-	runCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "print verbose debug information")
+	runCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "b", false, "print verbose debug information")
 }
 
 var runCmd = &cobra.Command{
@@ -125,6 +131,28 @@ func runTask(taskRequest TaskRequest) error {
 	if len(taskRequest.Constraints) > 0 {
 		placement.Constraints = taskRequest.Constraints
 		spec.TaskTemplate.Placement = placement
+	}
+
+	if len(taskRequest.Command) > 0 {
+		spec.TaskTemplate.ContainerSpec.Command = strings.Split(taskRequest.Command, " ")
+	}
+
+	spec.TaskTemplate.ContainerSpec.Mounts = []mount.Mount{}
+	for _, bindMount := range taskRequest.Mounts {
+		parts := strings.Split(bindMount, "=")
+		if len(parts) < 2 || len(parts) > 2 {
+			fmt.Fprintf(os.Stderr, "Bind-mounts must be specified as: src=dest, i.e. --mount /home/alex/tmp/=/tmp/\n")
+			os.Exit(1)
+		}
+
+		if len(parts) == 2 {
+			mountVal := mount.Mount{
+				Source: parts[0],
+				Target: parts[1],
+			}
+
+			spec.TaskTemplate.ContainerSpec.Mounts = append(spec.TaskTemplate.ContainerSpec.Mounts, mountVal)
+		}
 	}
 
 	createResponse, _ := c.ServiceCreate(context.Background(), spec, createOptions)

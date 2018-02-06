@@ -5,12 +5,15 @@ package cmd
 
 // TaskRequest holds options for running a jaas task
 type TaskRequest struct {
-	Image         string
-	Networks      []string
-	Constraints   []string
-	EnvVars       []string
+	Image       string
+	Networks    []string
+	Constraints []string
+	EnvVars     []string
+	Mounts      []string
+
 	ShowLogs      bool
 	Timeout       string
 	RemoveService bool
 	RegistryAuth  string
+	Command       string
 }
