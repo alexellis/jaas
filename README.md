@@ -66,6 +66,15 @@ If you aren't interested in the output logs then run it with the `--show-logs=fa
 # jaas run --image alexellis2/cows:latest --show-logs=false
 ```
 
+* Override the command of the container:
+
+```
+# jaas run -r --image alpine:3.6 --command "uname -a"
+
+Printing service logs
+w2018-02-06T13:40:00.131678932Z Linux f56d298c4ab9 4.9.75-linuxkit-aufs #1 SMP Tue Jan 9 10:58:17 UTC 2018 x86_64 Linux
+```
+
 * Removing service after completion
 
 To remove the service after it completes, run with the `--remove` or `-r` flag:
@@ -128,6 +137,8 @@ Here are several features / enhancements on the roadmap, please make additional 
 * [x] Support private registry auth via `-registryAuth` flag
 * [x] Move to cobra flags/args package for CLI
 * [x] Support constraints on where to run tasks
+* [x] Bind-mounting volumes
+* [x] Overriding container command
 
 Todo:
 
