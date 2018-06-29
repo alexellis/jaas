@@ -35,6 +35,7 @@ func init() {
 	runCmd.PersistentFlags().StringArrayVarP(&taskRequest.Constraints, "constraint", "c", []string{}, "constraint for task")
 	runCmd.PersistentFlags().StringArrayVarP(&taskRequest.EnvVars, "env", "e", []string{}, "environmental variable for task")
 	runCmd.PersistentFlags().StringArrayVarP(&taskRequest.Mounts, "mount", "m", []string{}, "bind-mount a volume the task")
+	runCmd.PersistentFlags().StringArrayVarP(&taskRequest.Secrets, "secret", "s", []string{}, "Add existing secret to task")
 
 	runCmd.PersistentFlags().StringArrayVar(&taskRequest.EnvFiles, "env-file", []string{}, "populate environment from an envfile for the task")
 
@@ -77,6 +78,7 @@ func runTask(taskRequest TaskRequest) error {
 		fmt.Printf("Connected to.. OK %s\n", taskRequest.Networks)
 		fmt.Printf("Constraints: %s\n", taskRequest.Constraints)
 		fmt.Printf("envVars: %s\n", taskRequest.EnvVars)
+		fmt.Printf("Secrets: %s\n", taskRequest.Secrets)
 	}
 
 	timeoutVal, parseErr := time.ParseDuration(taskRequest.Timeout)
@@ -169,6 +171,36 @@ func runTask(taskRequest TaskRequest) error {
 
 			spec.TaskTemplate.ContainerSpec.Mounts = append(spec.TaskTemplate.ContainerSpec.Mounts, mountVal)
 		}
+	}
+
+	secretList, err := c.SecretList(context.Background(), types.SecretListOptions{})
+
+	spec.TaskTemplate.ContainerSpec.Secrets = []*swarm.SecretReference{}
+	for _, serviceSecret := range taskRequest.Secrets {
+		var secretID string
+		for _, s := range secretList {
+			if serviceSecret == s.Spec.Annotations.Name {
+				secretID = s.ID
+				break
+			}
+		}
+		if secretID == "" {
+			fmt.Fprintf(os.Stderr, "No existing secret has name that matches %s\n", serviceSecret)
+			os.Exit(1)
+		}
+
+		secretVal := swarm.SecretReference{
+			File: &swarm.SecretReferenceFileTarget{
+				Name: serviceSecret,
+				UID:  "0",
+				GID:  "0",
+				Mode: os.FileMode(0444), // File can be read by any user inside the container
+			},
+			SecretName: serviceSecret,
+			SecretID:   secretID,
+		}
+
+		spec.TaskTemplate.ContainerSpec.Secrets = append(spec.TaskTemplate.ContainerSpec.Secrets, &secretVal)
 	}
 
 	createResponse, _ := c.ServiceCreate(context.Background(), spec, createOptions)
