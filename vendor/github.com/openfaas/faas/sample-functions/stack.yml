@@ -1,0 +1,102 @@
+provider:
+  name: faas
+  gateway: http://localhost:8080  # can be a remote server
+
+functions:
+  alpinefunction:
+    lang: dockerfile
+    handler: ./AlpineFunction
+    image: functions/alpine:latest
+    environment:
+      fprocess: "cat"
+
+  pwgen:
+    lang: dockerfile
+    handler: ./pwgen
+    image: functions/pwgen-sample:latest
+
+  apikey-secret:
+    lang: go
+    handler: ./apikey-secret
+    image: functions/apikey-secret:0.1
+
+  captainsintent:
+    lang: dockerfile
+    handler: ./CaptainsIntent
+    image: functions/captainsintent:latest
+
+  echo:
+    lang: dockerfile
+    handler: ./echo
+    image: functions/faas-echo:latest
+
+  changecolorintent:
+    lang: dockerfile
+    handler: ./ChangeColorIntent
+    image: functions/alexa-leds:latest
+
+  chelloworld:
+    lang: dockerfile
+    handler: ./CHelloWorld/src
+    image: functions/helloc:latest
+
+  dockerhubstats:
+    lang: dockerfile
+    handler: ./DockerHubStats
+    image: functions/hubstats:latest
+
+  gif-maker:
+    lang: dockerfile
+    handler: ./gif-maker
+    image: functions/gif-maker:latest
+    environment:
+      read_timeout:	60
+      write_timeout: 60 
+
+  hostnameintent:
+    lang: dockerfile
+    handler: ./HostnameIntent
+    image: functions/hostname-intent:latest
+
+  markdownrender:
+    lang: dockerfile
+    handler: ./MarkdownRender
+    image: functions/markdown-render:latest
+
+  nodeinfo:
+    lang: dockerfile
+    handler: ./NodeInfo
+    image: functions/node-info:latest
+
+  phantomjs:
+    lang: dockerfile
+    handler: ./Phantomjs
+    image: functions/phantomjs:latest
+
+  resizeimagemagick:
+    lang: dockerfile
+    handler: ./ResizeImageMagick
+    image: functions/resizer:latest
+
+  sentimentanalysis:
+    lang: dockerfile
+    handler: ./SentimentAnalysis
+    image: functions/sentimentanalysis:latest
+
+  webhookstash:
+    lang: dockerfile
+    handler: ./WebhookStash
+    image: functions/webhookstash:latest
+
+  wordcountfunction:
+    lang: dockerfile
+    handler: ./WordCountFunction
+    image: functions/wordcount:latest
+    environment:
+      fprocess: "wc"
+
+  nmap:
+    lang: dockerfile
+    handler: ./Nmap
+    image: functions/nmap:0.1
+
