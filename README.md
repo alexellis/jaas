@@ -118,9 +118,8 @@ $ jaas run --registry="`echo $auth | base64`" --image my.reg.domain/hello-world:
 To give the service access to an _existing secret_. run with the `--secret` or `-s` flag:
 
 ```
-# echo "p4ssword" > pass_file
-# docker secret create my_secret pass_file
-# jaas run --image alexellis2/href-counter:latest --env url=http://blog.alexellis.io/ --secret my_secret --command "cat /run/secrets/my_secret"
+$ echo -n "S3_ACCESS_KEY_HERE" | docker secret create s3-access-key -
+$ jaas run --image alpine:3.7 --secret s3-access-key --command "cat /run/secrets/s3-access-key"
 
 Service created: priceless_tesla (f8gheat9f3b8cnnsjy9dth9y7)
 ID:  f8gheat9f3b8cnnsjy9dth9y7  Update at:  2018-06-29 16:41:13.723257461 +0000 UTC
@@ -129,9 +128,8 @@ ID:  f8gheat9f3b8cnnsjy9dth9y7  Update at:  2018-06-29 16:41:13.723257461 +0000 
 Exit code: 0
 State: complete
 
-
 Printing service logs
-(2018-06-29T16:41:19.057738088Z p4ssword
+(2018-06-29T16:41:19.057738088Z S3_ACCESS_KEY_HERE
 
 Removing service...
 ```
