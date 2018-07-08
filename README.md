@@ -54,7 +54,7 @@ Now test `jaas` with `jaas --help`
 # jaas run -r --image alexellis2/cows:latest
 ```
 
-The `-rm` flag removes the Swarm service that was used to run your container.
+The `-r` flag removes the Swarm service that was used to run your container.
 
 > The exit code from your container will also be available, you can check it with `echo $?`
 
@@ -66,33 +66,61 @@ If you aren't interested in the output logs then run it with the `--show-logs=fa
 # jaas run --image alexellis2/cows:latest --show-logs=false
 ```
 
-* Override the command of the container:
+* Override the command of the container
 
 ```
-# jaas run -r --image alpine:3.6 --command "uname -a"
+# jaas run --image alpine:3.6 --command "uname -a"
 
 Printing service logs
 w2018-02-06T13:40:00.131678932Z Linux f56d298c4ab9 4.9.75-linuxkit-aufs #1 SMP Tue Jan 9 10:58:17 UTC 2018 x86_64 Linux
 ```
 
-* Removing service after completion
+* Environment variables
 
-To remove the service after it completes, run with the `--remove` or `-r` flag:
+Set environment variables with `--env` or `-e`:
 
 ```
-# jaas run --image alexellis2/href-counter:latest --env url=http://blog.alexellis.io/
+# jaas run --image alpine:3.6 --env ENV1=val1 --env ENV2=val2 --command "env"
 
-Service created: peaceful_shirley (uva6bcqyubm1b4c80dghjhb44)
-ID:  uva6bcqyubm1b4c80dghjhb44  Update at:  2017-03-14 22:19:54.381973142 +0000 UTC
-...
+Service created: inspiring_elion (j90qjtc14usgps9t60tvogmts)
+ID:  j90qjtc14usgps9t60tvogmts  Update at:  2018-07-14 18:02:57.147797437 +0000 UTC
+...........
 
 Exit code: 0
 State: complete
 
+
 Printing service logs
-?2017-03-14T22:19:55.660902727Z com.docker.swarm.node.id=b2dqydhfavwezorhkqi11f962,com.docker.swarm.service.id=uva6bcqyubm1b4c80dghjhb44,com.docker.swarm.task.id=yruxuawdipz2v5n0wvvm8ib0r {"internal":42,"external":2}
+a2018-07-14T18:03:01.465983797Z PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+52018-07-14T18:03:01.466098037Z HOSTNAME=de0b5614fc88
+)2018-07-14T18:03:01.466111965Z ENV1=val1
+)2018-07-14T18:03:01.466122558Z ENV2=val2
+*2018-07-14T18:03:01.466132520Z HOME=/root
 
 Removing service...
+```
+
+* Removing service after completion
+
+By default, the service is removed after it completes. To prevent that, run with the `--remove` or `-r` flag set to `false`:
+
+```
+# jaas run --image alpine:3.7 --remove=false
+
+Service created: zen_hoover (nwf2zey3i387zkx5gp7yjk053)
+ID:  nwf2zey3i387zkx5gp7yjk053  Update at:  2018-07-08 20:19:39.320494122 +0000 UTC
+............
+
+Exit code: 0
+State: complete
+
+
+Printing service logs
+
+# docker service ls
+
+ID            NAME        MODE        REPLICAS  IMAGE       PORTS
+nwf2zey3i387  zen_hoover  replicated  0/1       alpine:3.7
 ```
 
 * Docker authentication for registries
