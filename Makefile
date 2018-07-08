@@ -1,3 +1,4 @@
+.PHONY: test
 
 linux:
 	CGO_ENABLED=0 GOOS=linux go build -a -ldflags "-s -w" -installsuffix cgo -o ./jaas
@@ -7,3 +8,6 @@ darwin:
 
 docker:
 	docker build -t alexellis2/jaas:latest .
+
+test:
+	go test ./...
