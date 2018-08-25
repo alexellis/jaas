@@ -7,3 +7,4 @@ before_install:
 
 script:
     - make docker
+
