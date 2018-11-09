@@ -69,7 +69,7 @@ If you aren't interested in the output logs then run it with the `--show-logs=fa
 * Override the command of the container
 
 ```
-# jaas run --image alpine:3.6 --command "uname -a"
+# jaas run --image alpine:3.8 --command "uname -a"
 
 Printing service logs
 w2018-02-06T13:40:00.131678932Z Linux f56d298c4ab9 4.9.75-linuxkit-aufs #1 SMP Tue Jan 9 10:58:17 UTC 2018 x86_64 Linux
@@ -80,7 +80,7 @@ w2018-02-06T13:40:00.131678932Z Linux f56d298c4ab9 4.9.75-linuxkit-aufs #1 SMP T
 Set environment variables with `--env` or `-e`:
 
 ```
-# jaas run --image alpine:3.6 --env ENV1=val1 --env ENV2=val2 --command "env"
+# jaas run --image alpine:3.8 --env ENV1=val1 --env ENV2=val2 --command "env"
 
 Service created: inspiring_elion (j90qjtc14usgps9t60tvogmts)
 ID:  j90qjtc14usgps9t60tvogmts  Update at:  2018-07-14 18:02:57.147797437 +0000 UTC
@@ -105,7 +105,7 @@ Removing service...
 By default, the service is removed after it completes. To prevent that, run with the `--remove` or `-r` flag set to `false`:
 
 ```
-# jaas run --image alpine:3.7 --remove=false
+# jaas run --image alpine:3.8 --remove=false
 
 Service created: zen_hoover (nwf2zey3i387zkx5gp7yjk053)
 ID:  nwf2zey3i387zkx5gp7yjk053  Update at:  2018-07-08 20:19:39.320494122 +0000 UTC
@@ -177,6 +177,10 @@ You can also run `jaas` in a container, but the syntax becomes slightly more ver
   alexellis2/jaas run --image alexellis2/cows:latest
 ```
 
+## Real-life example
+
+You can use `jaas` to get the value of your OpenFaaS gateway password on Docker Swarm. See the [OpenFaaS troubleshooting guide](https://docs.openfaas.com/deployment/troubleshooting/#swarm_1) for the usage.
+
 ### Roadmap:
 
 Here are several features / enhancements on the roadmap, please make additional suggestions through Github issues.
@@ -188,10 +192,10 @@ Here are several features / enhancements on the roadmap, please make additional 
 * [x] Support constraints on where to run tasks
 * [x] Bind-mounting volumes
 * [x] Overriding container command
+* [x] Support optional secrets through CLI flag
 
 Todo:
 
-* [ ] Support optional secrets through CLI flag
 * [ ] Validation around images which are not in local library
 * [ ] Extract stdout/stderr etc from logs in human readable format similar to `docker logs`
 
