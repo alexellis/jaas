@@ -1,28 +1,34 @@
 # Jobs as a Service (JaaS)
 
-> A CLI for running jobs (ad-hoc containers/tasks) on Docker Swarm
+Run jobs (tasks/one-shot containers) on Docker Swarm
 
 This project provides a simple Golang CLI tool that binds to the Docker Swarm API to create an ad-hoc/one-shot Service and then poll until it exits. Service logs can also be retrieved if the Docker daemon API version is greater than 1.29 or if the experimental feature is enabled on the Docker daemon.
 
 [![Build Status](https://travis-ci.org/alexellis/jaas.svg?branch=master)](https://travis-ci.org/alexellis/jaas)
 
-**Motivation and context**
+## Motivation and context
 
 For a blog post covering use-cases for JaaS and more on the portions of the Docker API used see below:
 
 * [Blog: One-shot containers on Docker Swarm](http://blog.alexellis.io/containers-on-swarm/)
 
-**See also: Serverless**
+Use-cases:
 
-If you would like to build Serverless applications with Docker Swarm or Kubernetes checkout my write-up on OpenFaaS:
+* Use an elastic cluster as your computer
+* Clean up DB indexes
+* Send emails
+* Batch processing
+* Replace cron scripts
+* Run your server maintenance tasks
+* Schedule dev-ops tasks
+
+### See also: Serverless
+
+If you would like to build Serverless applications with Kubernetes or Docker Swarm checkout OpenFaaS:
 
 * [OpenFaaS.com](https://www.openfaas.com)
 
-The OpenFaaS project has dozens of contributors and thousands of GitHub stars - if you're here because you want to run short-lived functions then I highly recommend checking out OpenFaaS now.
-
-## Contributions are welcome
-
-See the [contributing guide](CONTRIBUTING.md) and do not raise a PR unless you've read it all.
+> The OpenFaaS project has dozens of contributors and thousands of GitHub stars - if you're here because you want to run short-lived functions then I highly recommend checking out OpenFaaS now.
 
 ## Get started
 
@@ -203,3 +209,7 @@ Todo:
 
 * When task logs are available in the API this will be used instead of service logs.
 * When event streams are released they will prevent the need to poll continually
+
+## Contributions are welcome
+
+See the [contributing guide](CONTRIBUTING.md) and do not raise a PR unless you've read it all.
