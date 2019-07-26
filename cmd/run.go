@@ -107,7 +107,7 @@ func runTask(taskRequest TaskRequest) error {
 	}
 
 	if taskRequest.ShowLogs {
-		apiVersion, parseErr := strconv.ParseFloat(versionInfo.APIVersion, 32)
+		apiVersion, parseErr := strconv.ParseFloat(versionInfo.APIVersion, 64)
 		if parseErr != nil {
 			apiVersion = 0
 		}
