@@ -1,10 +1,11 @@
 sudo: required
 
+language: go
+
 services:
-      - docker
-before_install:
-    - docker pull golang:1.9.2
+    - docker
 
 script:
+    - make test
     - make docker
 
