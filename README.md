@@ -204,6 +204,7 @@ Todo:
 
 * [ ] Validation around images which are not in local library
 * [ ] Extract stdout/stderr etc from logs in human readable format similar to `docker logs`
+* [ ] Support incoming [jobs API for Swarm](https://github.com/moby/moby/issues/39447)
 
 ### Future:
 
