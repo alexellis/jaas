@@ -56,7 +56,7 @@ Now test `jaas` with `jaas --help`
 
 * Run your first one-shot container with `jaas run`:
 
-```
+```bash
 # jaas run -r --image alexellis2/cows:latest
 ```
 
@@ -68,24 +68,31 @@ The `-r` flag removes the Swarm service that was used to run your container.
 
 If you aren't interested in the output logs then run it with the `--show-logs=false` override:
 
-```
+```bash
 # jaas run --image alexellis2/cows:latest --show-logs=false
 ```
 
 * Override the command of the container
 
-```
+```bash
 # jaas run --image alpine:3.8 --command "uname -a"
 
 Printing service logs
 w2018-02-06T13:40:00.131678932Z Linux f56d298c4ab9 4.9.75-linuxkit-aufs #1 SMP Tue Jan 9 10:58:17 UTC 2018 x86_64 Linux
 ```
 
+You can also try the example in `examples/gotask`:
+
+
+```bash
+# jaas run -r --image alexellis2/go-task:2020-03-11
+```
+
 * Environment variables
 
 Set environment variables with `--env` or `-e`:
 
-```
+```bash
 # jaas run --image alpine:3.8 --env ENV1=val1 --env ENV2=val2 --command "env"
 
 Service created: inspiring_elion (j90qjtc14usgps9t60tvogmts)
@@ -110,7 +117,7 @@ Removing service...
 
 By default, the service is removed after it completes. To prevent that, run with the `--remove` or `-r` flag set to `false`:
 
-```
+```bash
 # jaas run --image alpine:3.8 --remove=false
 
 Service created: zen_hoover (nwf2zey3i387zkx5gp7yjk053)
@@ -151,7 +158,7 @@ $ jaas run --registry="`echo $auth | base64`" --image my.reg.domain/hello-world:
 
 To give the service access to an _existing secret_. run with the `--secret` or `-s` flag:
 
-```
+```bash
 $ echo -n "S3_ACCESS_KEY_HERE" | docker secret create s3-access-key -
 $ jaas run --image alpine:3.7 --secret s3-access-key --command "cat /run/secrets/s3-access-key"
 
@@ -210,6 +217,10 @@ Todo:
 
 * When task logs are available in the API this will be used instead of service logs.
 * When event streams are released they will prevent the need to poll continually
+
+## Similar tools
+
+* [kjob](https://github.com/stefanprodan/kjob) by Stefan Prodan appears to be a close variation of jaas, but for Kubernetes.
 
 ## Contributions are welcome
 
