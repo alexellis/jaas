@@ -28,7 +28,11 @@ If you would like to build Serverless applications with Kubernetes or Docker Swa
 
 * [OpenFaaS.com](https://www.openfaas.com)
 
-> The OpenFaaS project has dozens of contributors and thousands of GitHub stars - if you're here because you want to run short-lived functions then I highly recommend checking out OpenFaaS now.
+> The OpenFaaS project has dozens of contributors and thousands of GitHub stars - if you're here because you want to run short-lived functions then try it out today for asynchronous invocations, dashboards, scale-to-zero, and detailed metrics.
+
+## Sponsor this project 🏆
+
+If you want to see this project developed or are using it commercially, then please [sponsor it here](https://github.com/sponsors/alexellis)
 
 ## Get started
 
@@ -206,6 +210,7 @@ Here are several features / enhancements on the roadmap, please make additional 
 * [x] Bind-mounting volumes
 * [x] Overriding container command
 * [x] Support optional secrets through CLI flag
+* [x] Support environment variable files with `--env-file`
 
 Todo:
 
@@ -221,7 +226,10 @@ Todo:
 
 ## Similar tools
 
+* [OpenFaaS](https://github.com/openfaas/faas) - OpenFaaS runs CLIs, microservices and functions on Kubernetes with built-in asynchronous invocation support
+* [faasd](https://github.com/openfaas/faasd) - faasd is a tiny version of OpenFaaS that runs CLIs and functions on a single node without Kubernetes
 * [kjob](https://github.com/stefanprodan/kjob) by Stefan Prodan appears to be a close variation of jaas, but for Kubernetes.
+* [argo workflows](https://github.com/argoproj/argo) - argo workflows can be used to run tasks and pielines on Kubernetes
 
 ## Contributions are welcome
 
