@@ -1,4 +1,4 @@
-FROM --platform=${BUILDPLATFORM:-linux/amd64} golang:1.13 as build
+FROM --platform=${BUILDPLATFORM:-linux/amd64} golang:1.13-alpine as build
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
@@ -28,7 +28,7 @@ RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go test ./... -cover
 RUN CGO_ENABLED=${CGO_ENABLED} GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     go build -ldflags $(LDFLAGS) -a -installsuffix cgo -o /usr/bin/jaas .
 
-FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.12
+FROM --platform=${TARGETPLATFORM:-linux/amd64} mirror.gcr.io/library/alpine:3.12
 # Add non root user and certs
 RUN apk --no-cache add ca-certificates \
     && addgroup -S app && adduser -S -g app app \
@@ -48,20 +48,3 @@ USER root
 WORKDIR /root/
 COPY --from=build /usr/bin/jaas /usr/bin/jaas
 ENTRYPOINT ["/usr/bin/jaas"]
-
-FROM golang:1.13 as build
-
-
-COPY .git       .git
-COPY cmd        cmd
-COPY vendor     vendor
-COPY version    version
-COPY main.go    .
-
-RUN VERSION=$(git describe --all --exact-match `git rev-parse HEAD` | grep tags | sed 's/tags\///') \
-    && GIT_COMMIT=$(git rev-list -1 HEAD) \
-    && CGO_ENABLED=0 GOOS=linux go build --ldflags "-s -w -X github.com/alexellis/jaas/version.GitCommit=${GIT_COMMIT} -X github.com/alexellis/jaas/version.Version=${VERSION}" -a -installsuffix cgo -o /root/jaas
-
-FROM alpine:3.12
-
-
