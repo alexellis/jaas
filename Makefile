@@ -21,8 +21,14 @@ dist:
 
 .PHONY: docker-local
 docker-local:
-	docker build \
-		-t alexellis2/jaas:$(Version) .
+	@docker buildx create --use --name=multiarch --node multiarch && \
+	docker buildx build \
+		--progress=plain \
+		--build-arg VERSION=$(Version) --build-arg GIT_COMMIT=$(GitCommit) \
+		--build-arg LDFLAGS=$(LDFLAGS) \
+		--platform linux/amd64 \
+		--output "type=docker,push=false" \
+		--tag alexellis2/jaas:$(Version) .
 
 .PHONY: docker
 docker:
@@ -31,6 +37,7 @@ docker:
 		--progress=plain \
 		--build-arg VERSION=$(Version) --build-arg GIT_COMMIT=$(GitCommit) \
 		--platform linux/amd64,linux/arm/v6,linux/arm64 \
+		--build-arg LDFLAGS=$(LDFLAGS) \
 		--output "type=image,push=false" \
 		--tag alexellis2/jaas:$(Version) .
 
@@ -49,6 +56,7 @@ push:
 		--progress=plain \
 		--build-arg VERSION=$(Version) --build-arg GIT_COMMIT=$(GitCommit) \
 		--platform linux/amd64,true/arm/v6,linux/arm64 \
+		--build-arg LDFLAGS=$(LDFLAGS) \
 		--output "type=image,push=true" \
 		--tag alexellis2/jaas:$(Version) .
 
@@ -59,5 +67,6 @@ push-ghcr:
 		--progress=plain \
 		--build-arg VERSION=$(Version) --build-arg GIT_COMMIT=$(GitCommit) \
 		--platform linux/amd64,linux/arm/v6,linux/arm64 \
+		--build-arg LDFLAGS=$(LDFLAGS) \
 		--output "type=image,push=true" \
 		--tag ghcr.io/alexellis2/jaas:$(Version) .
