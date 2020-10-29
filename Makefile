@@ -69,4 +69,4 @@ push-ghcr:
 		--platform linux/amd64,linux/arm/v6,linux/arm64 \
 		--build-arg LDFLAGS=$(LDFLAGS) \
 		--output "type=image,push=true" \
-		--tag ghcr.io/alexellis2/jaas:$(Version) .
+		--tag ghcr.io/alexellis/jaas:$(Version) .
