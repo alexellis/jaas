@@ -28,7 +28,7 @@ RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go test ./... -cover
 RUN CGO_ENABLED=${CGO_ENABLED} GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     go build -ldflags "${LDFLAGS}" -a -installsuffix cgo -o /usr/bin/jaas .
 
-FROM --platform=${TARGETPLATFORM:-linux/amd64} mirror.gcr.io/library/alpine:3.12
+FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.12
 # Add non root user and certs
 RUN apk --no-cache add ca-certificates \
     && addgroup -S app && adduser -S -g app app \
