@@ -55,7 +55,7 @@ push:
 	docker buildx build \
 		--progress=plain \
 		--build-arg VERSION=$(Version) --build-arg GIT_COMMIT=$(GitCommit) \
-		--platform linux/amd64,true/arm/v6,linux/arm64 \
+		--platform linux/amd64,linux/arm/v6,linux/arm64 \
 		--build-arg LDFLAGS=$(LDFLAGS) \
 		--output "type=image,push=true" \
 		--tag alexellis2/jaas:$(Version) .
