@@ -79,7 +79,7 @@ If you aren't interested in the output logs then run it with the `--show-logs=fa
 * Override the command of the container
 
 ```bash
-# jaas run --image alpine:3.8 --command "uname -a"
+# jaas run --image alpine:3.12 --command "uname -a"
 
 Printing service logs
 w2018-02-06T13:40:00.131678932Z Linux f56d298c4ab9 4.9.75-linuxkit-aufs #1 SMP Tue Jan 9 10:58:17 UTC 2018 x86_64 Linux
@@ -97,7 +97,7 @@ You can also try the example in `examples/gotask`:
 Set environment variables with `--env` or `-e`:
 
 ```bash
-# jaas run --image alpine:3.8 --env ENV1=val1 --env ENV2=val2 --command "env"
+# jaas run --image alpine:3.12 --env ENV1=val1 --env ENV2=val2 --command "env"
 
 Service created: inspiring_elion (j90qjtc14usgps9t60tvogmts)
 ID:  j90qjtc14usgps9t60tvogmts  Update at:  2018-07-14 18:02:57.147797437 +0000 UTC
@@ -122,7 +122,7 @@ Removing service...
 By default, the service is removed after it completes. To prevent that, run with the `--remove` or `-r` flag set to `false`:
 
 ```bash
-# jaas run --image alpine:3.8 --remove=false
+# jaas run --image alpine:3.12 --remove=false
 
 Service created: zen_hoover (nwf2zey3i387zkx5gp7yjk053)
 ID:  nwf2zey3i387zkx5gp7yjk053  Update at:  2018-07-08 20:19:39.320494122 +0000 UTC
