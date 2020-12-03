@@ -22,11 +22,11 @@ Use-cases:
 * Run your server maintenance tasks
 * Schedule dev-ops tasks
 
-## The value to your workflow
+## Built for developers by developers
 
-If you're a user or find value in this project for your workflow, then support its ongoing development and support on GitHub.
-
-* [Sponsor on GitHub](https://github.com/sponsors/alexellis/)
+<a href="https://github.com/sponsors/alexellis/">
+<img alt="Sponsor this project" src="https://github.com/alexellis/alexellis/blob/master/sponsor-today.png" width="65%" height="65%">
+</a>
 
 ### See also: Serverless
 
