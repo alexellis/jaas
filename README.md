@@ -22,6 +22,12 @@ Use-cases:
 * Run your server maintenance tasks
 * Schedule dev-ops tasks
 
+## The value to your workflow
+
+If you're a user or find value in this project for your workflow, then support its ongoing development and support on GitHub.
+
+* [Sponsor on GitHub](https://github.com/sponsors/alexellis/)
+
 ### See also: Serverless
 
 If you would like to build Serverless applications with Kubernetes or Docker Swarm checkout OpenFaaS:
