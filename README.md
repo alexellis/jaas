@@ -1,3 +1,7 @@
+## Notice: archived
+
+This project is archived, which means there are no plans for further development. If your company is using this in production, contact OpenFaaS Ltd for a commercial license and support. contact@openfaas.com
+
 # Jobs as a Service (JaaS)
 
 Run jobs (tasks/one-shot containers) on Docker Swarm
